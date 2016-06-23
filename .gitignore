@@ -1,0 +1,13 @@
+## Hour ahead framework gitignore file
+*old*/*
+Data/*
+Day*/*
+*.gdx
+*.lst
+*.inc
+*.lxi
+*.log
+*.xls
+*.xlsx
+*.csv
+*.~gm
