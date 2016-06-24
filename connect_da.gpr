@@ -376,29 +376,10 @@ PlaneRownr=-1
 [RP:INPUT_DATA_UC]
 1=
 
-[OPENWINDOW_1]
-MAXIM=0
-TOP=1
-LEFT=4
-HEIGHT=855
-WIDTH=1528
-
 [RP:NETWORK_CONSTRAINED_MODEL6]
 1=
 
 [RP:INPUT_DATA6]
-1=
-
-[RP:DA_CF_MODEL]
-1=
-
-[RP:DA_CF_MODEL2]
-1=
-
-[RP:DA_UC_MODEL]
-1=
-
-[RP:DA_UC_MODEL2]
 1=
 
 [RP:INPUT_DATA]
@@ -431,6 +412,18 @@ WIDTH=1528
 [RP:HA_UC_MODEL_4HOUR_TH]
 1=
 
+[RP:DA_UC_MODEL]
+1=
+
+[RP:DA_CF_MODEL]
+1=
+
+[RP:DA_CF_MODEL2]
+1=
+
+[RP:DA_UC_MODEL2]
+1=
+
 [MRUFILES]
 1=C:\BPA_project\Test_connect_HA_ok\input_data_4hour_TH.gms
 2=C:\BPA_project\Test_connect_HA_ok\HA_UC_model2_4hour_TH.gms
@@ -439,5 +432,19 @@ WIDTH=1528
 5=C:\BPA_project\Test_connect_HA_ok\HA_CF_model_4hour_TH.gms
 6=C:\BPA_project\Test_connect_DA_new_ok\input_data.lst
 7=C:\BPA_project\Test_connect_DA_new_ok\input_data.gms
-8=C:\BPA_project\Test_connect_DA_new_ok\DA_UC_model2.gms
-9=C:\BPA_project\Test_connect_DA_new_ok\DA_UC_model.lst
+
+[OPENWINDOW_1]
+FILE0=C:\BPA_project\Test_connect_DA_new_ok\DA_CF_model.gms
+FILE1=C:\BPA_project\Test_connect_DA_new_ok\DA_CF_model.lst
+FILE2=C:\BPA_project\Test_connect_DA_new_ok\DA_CF_model2.gms
+FILE3=C:\BPA_project\Test_connect_DA_new_ok\DA_CF_model2.lst
+FILE4=C:\BPA_project\Test_connect_DA_new_ok\DA_UC_model.gms
+FILE5=C:\BPA_project\Test_connect_DA_new_ok\DA_UC_model.lst
+FILE6=C:\BPA_project\Test_connect_DA_new_ok\DA_UC_model2.gms
+FILE7=C:\BPA_project\Test_connect_DA_new_ok\DA_UC_model2.lst
+FILE8=C:\BPA_project\Test_connect_DA_new_ok\DA_UC_model2.lst
+MAXIM=0
+TOP=26
+LEFT=26
+HEIGHT=871
+WIDTH=1403

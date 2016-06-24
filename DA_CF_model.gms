@@ -16,54 +16,53 @@ Option limrow=0, limcol=0, solprint=off, sysout=off;
 ** READING INPUT DATA
 ********************************************************************************
 
-
-$include C:\BPA_project\Test_connect_DA_new_ok\input_data.gms
+$include C:\Users\idm\Desktop\BPA_project\Test_connect_DA\input_data.gms
 
 Table g_bis2(i,t)
 $ondelim
-$include C:\BPA_project\Test_connect_DA_new_ok\Data\gbis.csv
+$include C:\Users\idm\Desktop\BPA_project\Test_connect_DA\Data\gbis.csv
 $offdelim
 ;
 
 Table glin_bis2A(i,t)
 $ondelim
-$include C:\BPA_project\Test_connect_DA_new_ok\Data\glin_bisA.csv
+$include C:\Users\idm\Desktop\BPA_project\Test_connect_DA\Data\glin_bisA.csv
 $offdelim
 ;
 
 Table glin_bis2B(i,t)
 $ondelim
-$include C:\BPA_project\Test_connect_DA_new_ok\Data\glin_bisB.csv
+$include C:\Users\idm\Desktop\BPA_project\Test_connect_DA\Data\glin_bisB.csv
 $offdelim
 ;
 
 Table glin_bis2C(i,t)
 $ondelim
-$include C:\BPA_project\Test_connect_DA_new_ok\Data\glin_bisC.csv
+$include C:\Users\idm\Desktop\BPA_project\Test_connect_DA\Data\glin_bisC.csv
 $offdelim
 ;
 
 Table slack_wind_bis2(w,t)
 $ondelim
-$include C:\BPA_project\Test_connect_DA_new_ok\Data\slackwindbis.csv
+$include C:\Users\idm\Desktop\BPA_project\Test_connect_DA\Data\slackwindbis.csv
 $offdelim
 ;
 
 Table slack_solar_bis2(r,t)
 $ondelim
-$include C:\BPA_project\Test_connect_DA_new_ok\Data\slacksolarbis.csv
+$include C:\Users\idm\Desktop\BPA_project\Test_connect_DA\Data\slacksolarbis.csv
 $offdelim
 ;
 
 Table slack_fixed_bis2(f,t)
 $ondelim
-$include C:\BPA_project\Test_connect_DA_new_ok\Data\slackfixedbis.csv
+$include C:\Users\idm\Desktop\BPA_project\Test_connect_DA\Data\slackfixedbis.csv
 $offdelim
 ;
 
 Table powerflowUC2(l,t)
 $ondelim
-$include C:\BPA_project\Test_connect_DA_new_ok\Data\powerflow.csv
+$include C:\Users\idm\Desktop\BPA_project\Test_connect_DA\Data\powerflow.csv
 $offdelim
 ;
 
@@ -346,7 +345,7 @@ solve CR using mip minimizing obj;
 
 ** We write in a file the power extracted based on the charge and discharge
 ** from the ES device
-FILE output6 /'C:\BPA_project\Test_connect_DA_new_ok\Data\pext.csv'/;
+FILE output6 /'C:\Users\idm\Desktop\BPA_project\Test_connect_DA\Data\pext.csv'/;
 put output6
 put "** Power extracted **"/;
 loop(t,
@@ -366,7 +365,7 @@ put /;
 
 Table p_ext2(d,t)
 $ondelim
-$include C:\BPA_project\Test_connect_DA_new_ok\Data\pext.csv
+$include C:\Users\idm\Desktop\BPA_project\Test_connect_DA\Data\pext.csv
 $offdelim
 ;
 
@@ -390,7 +389,7 @@ display soc.l, ch_total.l, dis_total.l;
 
 OPTIONS decimals=6;
 
-FILE ES_information_output /'C:\BPA_project\Test_connect_DA_new_ok\Data\ES_information.csv'/;
+FILE ES_information_output /'C:\Users\idm\Desktop\BPA_project\Test_connect_DA\Data\ES_information.csv'/;
 PUT ES_information_output;
 
 put "** MAP ENERGY STORAGE - BUS, AREA, ZONE **"/;
@@ -406,7 +405,7 @@ put /;
 
 
 
-FILE Action_output /'C:\BPA_project\Test_connect_new_DA_ok\Data\Action.csv'/;
+FILE Action_output /'C:\Users\idm\Desktop\BPA_project\Test_connect_DA\Data\Action.csv'/;
 put Action_output
 PUT_UTILITIES 'ren' / 'Action_':0 N:1:0 '.csv':0;
 
@@ -427,7 +426,7 @@ put /;
 );
 
 
-FILE Load_forecast_output /'C:\BPA_project\Test_connect_new_DA_ok\Data\Load_forecast.csv'/;
+FILE Load_forecast_output /'C:\Users\idm\Desktop\BPA_project\Test_connect_DA\Data\Load_forecast.csv'/;
 PUT Load_forecast_output;
 PUT_UTILITIES 'ren' / 'Load_forecast_':0 N:1:0 '.csv':0;
 
@@ -459,5 +458,5 @@ sst=CR.solvestat;
 power_flow_out(t,l)= pf.l(t,l)*s_base+eps;
 
 
-execute_unload "C:\BPA_project\Test_connect_DA_new_ok\Data\cr_day2_1ES.gdx" power_flow_out,mst, sst,M_cong_snpd_aux, time_elapsed, M_cong_aux ;
+execute_unload "C:\Users\idm\Desktop\BPA_project\Test_connect_DA\Data\cr_day2_1ES.gdx" power_flow_out,mst, sst,M_cong_snpd_aux, time_elapsed, M_cong_aux ;
 

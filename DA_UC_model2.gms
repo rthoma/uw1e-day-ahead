@@ -19,11 +19,11 @@ Option limrow=0, limcol=0, solprint=off, sysout=off;
 
 ** We assume that the total injections/extractions from ES are accepted by DEPO
 ** In the general case, DEPO would provide a slightly different schedule or not
-$include C:\BPA_project\Test_connect_DA_new_ok\input_data.gms
+$include C:\Users\idm\Desktop\BPA_project\Test_connect_DA\input_data.gms
 
 Table p_ext2(d,t)
 $ondelim
-$include C:\BPA_project\Test_connect_DA_new_ok\Data\pext_2round.csv
+$include C:\Users\idm\Desktop\BPA_project\Test_connect_DA\Data\pext_2round.csv
 $offdelim
 ;
 
@@ -219,7 +219,7 @@ slack_fixed_out_total = sum((f,t), slack_fixed.l(f,t)) *s_base+eps;
 slack_flow_out(l,t)= slack_flow.l(l,t)*s_base+eps;
 
 
-execute_unload "C:\BPA_project\Test_connect_DA_new_ok\uc_constrained_post_day2_relieved_1ES.gdx" slack_flow_out,slack_solar_out_total,slack_wind_out_total,slack_fixed_out_total,power_output_out,slack_solar_out,slack_wind_out,slack_fixed_out,power_flow_out,mst, sst,total_cost,M_cong_snpd_aux, generation_cost, time_elapsed, M_cong_aux,flow_cong_output ;
+execute_unload "C:\Users\idm\Desktop\BPA_project\Test_connect_DA\uc_constrained_post_day2_relieved_1ES.gdx" slack_flow_out,slack_solar_out_total,slack_wind_out_total,slack_fixed_out_total,power_output_out,slack_solar_out,slack_wind_out,slack_fixed_out,power_flow_out,mst, sst,total_cost,M_cong_snpd_aux, generation_cost, time_elapsed, M_cong_aux,flow_cong_output ;
 
 
 
