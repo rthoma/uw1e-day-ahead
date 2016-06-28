@@ -87,6 +87,7 @@ alias (t,tt);
 ** and penalization of the relaxations associated with the transmission
 ** capacity constraints. This last term can be removed if the capacity constraints
 ** are not taken into account. If not, it would be 0.
+
 cost..
          obj =e= sum((t,i),suc_sw(i)*y(t,i)+a(i)*v(t,i) + sum(b,g_lin(t,i,b)*k(i,b)))
          + sum((t,r), slack_solar(r,t)) * VoRS
