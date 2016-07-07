@@ -10,7 +10,11 @@ $offsymxref
 $offuellist
 $offuelxref
 
-Option limrow=0, limcol=0, solprint=off, sysout=off;
+option limrow = 0,
+       limcol = 0,
+       solprint = off,
+       sysout = off
+;
 
 ********************************************************************************
 ** READING INPUT DATA
@@ -19,62 +23,63 @@ Option limrow=0, limcol=0, solprint=off, sysout=off;
 ** We read the same output data from stage 1
 $include C:\BPA_project\Test_connect_DA_new_ok\input_data.gms
 
-Table g_bis2(i,t)
+table g_bis2(i,t)
 $ondelim
 $include C:\BPA_project\Test_connect_DA_new_ok\Data\gbis.csv
 $offdelim
 ;
 
-Table glin_bis2A(i,t)
+table glin_bis2A(i,t)
 $ondelim
 $include C:\BPA_project\Test_connect_DA_new_ok\Data\glin_bisA.csv
 $offdelim
 ;
 
-Table glin_bis2B(i,t)
+table glin_bis2B(i,t)
 $ondelim
 $include C:\BPA_project\Test_connect_DA_new_ok\Data\glin_bisB.csv
 $offdelim
 ;
 
-Table glin_bis2C(i,t)
+table glin_bis2C(i,t)
 $ondelim
 $include C:\BPA_project\Test_connect_DA_new_ok\Data\glin_bisC.csv
 $offdelim
 ;
 
-Table slack_wind_bis2(w,t)
+table slack_wind_bis2(w,t)
 $ondelim
 $include C:\BPA_project\Test_connect_DA_new_ok\Data\slackwindbis.csv
 $offdelim
 ;
 
-Table slack_solar_bis2(r,t)
+table slack_solar_bis2(r,t)
 $ondelim
 $include C:\BPA_project\Test_connect_DA_new_ok\Data\slacksolarbis.csv
 $offdelim
 ;
 
-Table slack_fixed_bis2(f,t)
+table slack_fixed_bis2(f,t)
 $ondelim
 $include C:\BPA_project\Test_connect_DA_new_ok\Data\slackfixedbis.csv
 $offdelim
 ;
 
-Table powerflowUC2(l,t)
+table powerflowUC2(l,t)
 $ondelim
 $include C:\BPA_project\Test_connect_DA_new_ok\Data\powerflow.csv
 $offdelim
 ;
 
-Parameter
+parameter
          glin_bis(t,i,b)             generator block outputs in the pre-contingency state
          slack_solar_bis(r,t)        solar spillage in the pre-contingency state
          slack_wind_bis(w,t)         wind spillage in the pre-contingency state
          slack_fixed_bis(f,t)        fixed spillage in the pre-contingency state
-         gbis(t,i)                  power output of generators in the pre-contingency state
-         M_cong_aux(t,l)
-         M_cong(t);
+         gbis(t,i)                   power output of generators in the pre-contingency state
+         M_cong_aux(t,l)             parameter that is equal to 1 if the line l at period t is congested and 0 otherwise
+         M_cong(t)                   parameter that is equal to 1 if there is at least one line congested in period t
+;
 
 gbis(t,i)=g_bis2(i,t) ;
 glin_bis(t,i,'b1')=glin_bis2A(i,t) ;
@@ -92,6 +97,7 @@ M_cong(t)$(sum(l,M_cong_aux(t,l)) gt 0)=1;
 
 ** We read the input data from DEPO: schedule and prices for each of the actions
 ** that TEPO can do
+
 table ch_DEPO(d,t)
 $ondelim
 $include C:\BPA_project\Test_connect_DA_new_ok\Data\ch_DEPO.csv
@@ -141,25 +147,40 @@ $offdelim
 ;
 
 ** We define and compute the bounds used in the current model for the ES devices
-Parameters Bound_ch(t,d),Bound_dis(t,d),Bound_SD(t,d),Bound_SC(t,d);
+parameters Bound_ch(t, d),
+           Bound_dis(t, d),
+           Bound_SD(t, d),
+           Bound_SC(t, d)
+;
 
-Bound_ch(t,d)= (ES_power_max(d)*s_base-ch_DEPO(d,t))$(ch_DEPO(d,t) gt 0) + (ES_power_max(d)*s_base)$(dis_DEPO(d,t) gt 0) + (ES_power_max(d)*s_base)$(dis_DEPO(d,t) eq 0 and ch_DEPO(d,t) eq 0);
-Bound_dis(t,d)= (ES_power_max(d)*s_base)$(ch_DEPO(d,t) gt 0) + (ES_power_max(d)*s_base-dis_DEPO(d,t))$(dis_DEPO(d,t) gt 0) + (ES_power_max(d)*s_base)$(dis_DEPO(d,t) eq 0 and ch_DEPO(d,t) eq 0);
-Bound_SD(t,d)= (0)$(ch_DEPO(d,t) gt 0) + (dis_DEPO(d,t))$(dis_DEPO(d,t) gt 0) + (0)$(dis_DEPO(d,t) eq 0 and ch_DEPO(d,t) eq 0);
-Bound_SC(t,d)= (ch_DEPO(d,t))$(ch_DEPO(d,t) gt 0) + (0)$(dis_DEPO(d,t) gt 0) + (0)$(dis_DEPO(d,t) eq 0 and ch_DEPO(d,t) eq 0);
+Bound_ch(t, d) = (ES_power_max(d)*s_base-ch_DEPO(d, t))$(ch_DEPO(d, t) gt 0)
+               + (ES_power_max(d)*s_base)$(dis_DEPO(d, t) gt 0)
+               + (ES_power_max(d)*s_base)$(dis_DEPO(d, t) eq 0 and ch_DEPO(d, t) eq 0);
 
-Bound_ch(t,d)=Bound_ch(t,d)/s_base;
-Bound_dis(t,d)= Bound_dis(t,d)/s_base;
-Bound_SD(t,d)= Bound_SD(t,d)/s_base;
-Bound_SC(t,d)= Bound_SC(t,d)/s_base;
-ch_DEPO(d,t)=ch_DEPO(d,t)/s_base;
-dis_DEPO(d,t)=dis_DEPO(d,t)/s_base;
-C_ch(d,t) =C_ch(d,t)*s_base;
-C_dis(d,t)=C_dis(d,t)*s_base;
-C_SC(d,t)=C_SC(d,t)*s_base;
-C_SD(d,t)= C_SD(d,t)*s_base;
-P_ch(d,t)=P_ch(d,t)*s_base;
-P_dis(d,t)= P_dis(d,t)*s_base;
+Bound_dis(t, d) = (ES_power_max(d)*s_base)$(ch_DEPO(d, t) gt 0)
+                + (ES_power_max(d)*s_base-dis_DEPO(d, t))$(dis_DEPO(d, t) gt 0)
+                + (ES_power_max(d)*s_base)$(dis_DEPO(d, t) eq 0 and ch_DEPO(d, t) eq 0);
+
+Bound_SD(t, d) = (0)$(ch_DEPO(d, t) gt 0)
+               + (dis_DEPO(d, t))$(dis_DEPO(d, t) gt 0)
+               + (0)$(dis_DEPO(d,t) eq 0 and ch_DEPO(d,t) eq 0);
+
+Bound_SC(t, d) = (ch_DEPO(d, t))$(ch_DEPO(d, t) gt 0)
+               + (0)$(dis_DEPO(d, t) gt 0)
+               + (0)$(dis_DEPO(d, t) eq 0 and ch_DEPO(d, t) eq 0);
+
+Bound_ch(t, d) = Bound_ch(t, d) / s_base;
+Bound_dis(t, d) = Bound_dis(t, d) / s_base;
+Bound_SD(t, d) = Bound_SD(t, d) / s_base;
+Bound_SC(t, d) = Bound_SC(t, d) / s_base;
+ch_DEPO(d, t) = ch_DEPO(d, t) / s_base;
+dis_DEPO(d, t) = dis_DEPO(d, t) / s_base;
+C_ch(d, t) = C_ch(d, t) * s_base;
+C_dis(d, t) = C_dis(d, t) * s_base;
+C_SC(d, t) = C_SC(d, t) * s_base;
+C_SD(d, t) = C_SD(d, t) * s_base;
+P_ch(d, t) = P_ch(d, t) * s_base;
+P_dis(d, t) = P_dis(d, t) * s_base;
 
 ********************************************************************************
 ** DECLARATION OF FREE VARIABLES, POSITIVE VARIABLES, BINARY VARIABLES
@@ -173,31 +194,32 @@ variables
 
 
 positive variables
-         ch_total(t,d)                   Power extracted at the bus where device d is located
-         dis_total(t,d)                  Power extracted at the bus where device d in located
-         deltag_plus(t,i)                Positive deviation for g
-         deltag_minus(t,i)               Negative deviation for g
-         deltag_lin_plus(t,i,b)          Positive deviation for g_lin
-         deltag_lin_minus(t,i,b)         Negative deviation for g_lin
-         slack_wind_plus(t,w)            Positive deviation for wind power spillage
-         slack_wind_minus(t,w)           Negative deviation for wind power spillage
-         slack_solar_plus(t,r)           Positive deviation for solar power spillage
-         slack_solar_minus(t,r)          Negative deviation for solar power spillage
-         slack_fixed_plus(t,f)           Positive deviation for fixed power spillage
-         slack_fixed_minus(t,f)          Negative deviation for fixed power spillage
-         slack(s,t)                      Relaxation of the nodal power balance equation just in case it is infeasible
-         ch_TEPO_SD(t,d)                 Stop discharging
-         dis_TEPO_SC(t,d)                Stop charging
-         ch_TEPO(t,d)                    Charging from TEPO
-         dis_TEPO(t,d)                   Discharging from TEPO
-         soc(t,d)                        Energy storage state of charge
+         ch_total(t,d)                   power extracted at the bus where device d is located
+         dis_total(t,d)                  power extracted at the bus where device d in located
+         deltag_plus(t,i)                positive deviation for g
+         deltag_minus(t,i)               negative deviation for g
+         deltag_lin_plus(t,i,b)          positive deviation for g_lin
+         deltag_lin_minus(t,i,b)         negative deviation for g_lin
+         slack_wind_plus(t,w)            positive deviation for wind power spillage
+         slack_wind_minus(t,w)           negative deviation for wind power spillage
+         slack_solar_plus(t,r)           positive deviation for solar power spillage
+         slack_solar_minus(t,r)          negative deviation for solar power spillage
+         slack_fixed_plus(t,f)           positive deviation for fixed power spillage
+         slack_fixed_minus(t,f)          negative deviation for fixed power spillage
+         slack(s,t)                      relaxation of the nodal power balance equation just in case it is infeasible
+         ch_TEPO_SD(t,d)                 stop discharging
+         dis_TEPO_SC(t,d)                stop charging
+         ch_TEPO(t,d)                    charging from tepo
+         dis_TEPO(t,d)                   discharging from tepo
+         soc(t,d)                        energy storage state of charge
 ;
 
 
 binary variables
-         v(t,i)                  commitment variable
-         y(t,i)                  start up variable
-         z(t,i)                  shut down variable
+         v(t,i)           commitment variable
+         y(t,i)           start up variable
+         z(t,i)           shut down variable
+         v_ch(t,d)        binary variable associated with the charge of ES device d in period t
 ;
 
 
@@ -238,9 +260,11 @@ equations
          dis_TEPO_limit(t,d)                     Discharging from TEPO limit
          soc_limit(t,d)                          Energy state of charge limit
          eq_soc_final(t,d)                       Final energy state of charge
-
 ;
+
+
 alias (t,tt);
+
 
 ********************************************************************************
 ** DEFINITION OF CONSTRAINTS FOR BOTH MODELS
@@ -254,10 +278,13 @@ cost..
     obj =e= sum((t,i),suc_sw(i)*y(t,i)+a(i)*v(t,i) + sum(b,(deltag_lin_plus(t,i,b)+deltag_lin_minus(t,i,b))*k(i,b)))
     + sum((t,r), slack_solar_plus(t,r)+slack_solar_minus(t,r)) * penalty_pf
     + sum((t,w), slack_wind_plus(t,w)+slack_wind_minus(t,w)) * penalty_pf
-    + sum((f,t),slack_fixed_plus(t,f)+slack_fixed_minus(t,f))* penalty_pf
-    + sum((t,d)$(ch_DEPO(d,t) ge 0),ch_TEPO(t,d)*C_ch(d,t))+sum((t,d)$(dis_DEPO(d,t) ge 0),dis_TEPO(t,d)*C_dis(d,t))
-    + sum((t,d)$(ch_DEPO(d,t) gt 0),dis_TEPO_SC(t,d)*C_SC(d,t))+sum((t,d)$(dis_DEPO(d,t) gt 0),ch_TEPO_SD(t,d)*C_SD(d,t))
-    + sum((t,d)$(dis_DEPO(d,t) gt 0),ch_TEPO(t,d)*P_ch(d,t))+sum((t,d)$(ch_DEPO(d,t) gt 0),dis_TEPO(t,d)*P_dis(d,t))
+    + sum((f,t),slack_fixed_plus(t,f)+slack_fixed_minus(t,f)) * penalty_pf
+    + sum((t,d)$(ch_DEPO(d,t) ge 0),ch_TEPO(t,d)*C_ch(d,t))
+    + sum((t,d)$(dis_DEPO(d,t) ge 0),dis_TEPO(t,d)*C_dis(d,t))
+    + sum((t,d)$(ch_DEPO(d,t) gt 0),dis_TEPO_SC(t,d)*C_SC(d,t))
+    + sum((t,d)$(dis_DEPO(d,t) gt 0),ch_TEPO_SD(t,d)*C_SD(d,t))
+    + sum((t,d)$(dis_DEPO(d,t) gt 0),ch_TEPO(t,d)*P_ch(d,t))
+    + sum((t,d)$(ch_DEPO(d,t) gt 0),dis_TEPO(t,d)*P_dis(d,t))
     + sum((s,t),slack(s,t))*100000000
 ;
 
@@ -313,8 +340,9 @@ power_balance(t,s)..
 ;
 
 
-line_flow(t,l)..
-         pf(t,l) =e= admittance(l)*(sum(s$(line_map(l,'from')= ord(s)),theta(t,s))-sum(s$(line_map(l,'to')= ord(s)),theta(t,s)));
+line_flow(t, l)..
+        pf(t, l) =e= admittance(l)*(sum(s$(line_map(l, 'from') = ord(s)), theta(t, s))
+                                  - sum(s$(line_map(l, 'to') = ord(s)), theta(t, s)));
 
 line_capacity_min(t,l)..
          pf(t,l) =g= -l_max(l);
@@ -351,53 +379,42 @@ slack_fixed_constr2(t,f)..
 ** Initial energy storage state of charge trajectory
 eq_storage_init(t,d)$(ord(t) eq 1)..
          soc(t,d)=e=E_initial(d)+ch_total(t,d)*alef_ch(d)-dis_total(t,d)/alef_dis(d);
-;
 
 ** Energy storage state of charge trajectory in periods greater than 1
 eq_storage(t,d)$(ord(t) gt 1)..
          soc(t,d)=e=soc(t-1,d)+ch_total(t,d)*alef_ch(d)-dis_total(t,d)/alef_dis(d);
-;
 
 ** Definition of the total charge of ES
 eq_ch_total(t,d)..
-         ch_total(t,d)=e=ch_DEPO(d,t)+ch_TEPO_SD(t,d)+ch_TEPO(t,d)
-;
+         ch_total(t,d)=e=ch_DEPO(d,t)+ch_TEPO_SD(t,d)+ch_TEPO(t,d);
 
 ** Definition of the total discharge of ES
 eq_dis_total(t,d)..
-         dis_total(t,d)=e=dis_DEPO(d,t)+dis_TEPO_SC(t,d)+dis_TEPO(t,d)
-;
+         dis_total(t,d)=e=dis_DEPO(d,t)+dis_TEPO_SC(t,d)+dis_TEPO(t,d);
 
 ** Stop discharging limit
 ch_SD_limit(t,d)..
-         ch_TEPO_SD(t,d)=l=Bound_SD(t,d)
-;
+         ch_TEPO_SD(t,d)=l=Bound_SD(t,d);
 
 ** Stop charging limit
 dis_SC_limit(t,d)..
-         dis_TEPO_SC(t,d)=l=Bound_SC(t,d)
-;
+         dis_TEPO_SC(t,d)=l=Bound_SC(t,d);
 
 ** TEPO charging limit
 ch_TEPO_limit(t,d)..
-         ch_TEPO(t,d)=l=Bound_ch(t,d)
-;
+         ch_TEPO(t,d)=l=Bound_ch(t,d);
 
 ** TEPO discharging limit
 dis_TEPO_limit(t,d)..
-         dis_TEPO(t,d)=l=Bound_dis(t,d)
-;
+         dis_TEPO(t,d)=l=Bound_dis(t,d);
 
 ** ES energy state of charge limit
 soc_limit(t,d)..
-         soc(t,d)=l=Emax(d)
-;
+         soc(t,d)=l=Emax(d);
 
 ** Final energy state of charge
 eq_soc_final(t,d)$(ord(t) eq card(t))..
-         soc(t,d)=e=E_final(d)
-;
-
+         soc(t,d)=e=E_final(d);
 
 model CR /all/;
 
@@ -407,10 +424,11 @@ model CR /all/;
 ********************************************************************************
 
 option reslim = 1000000;
-*option Savepoint=1;
-option optcr=0.01;
+option optcr = 0.01;
 option threads = 1;
-*option optca=0;
+
+* option Savepoint = 1;
+* option optca = 0;
 
 ********************************************************************************
 ** SOLVING THE CONGESTION RELIEF PROBLEM FOR THE DAY-AHEAD OPERATION
@@ -442,7 +460,7 @@ put /;
 );
 
 
-Table p_ext2(d,t)
+table p_ext2(d,t)
 $ondelim
 $include C:\BPA_project\Test_connect_DA_new_ok\Data\pext_2round.csv
 $offdelim

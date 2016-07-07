@@ -1,5 +1,5 @@
 ********************************************************************************
-** FOURTH STAGE OF THE CONGESTION RELIEF PROBLEM. DAY-AHEAD SCHEDULE
+*** FOURTH STAGE OF THE CONGESTION RELIEF PROBLEM. DAY-AHEAD SCHEDULE          *
 ********************************************************************************
 
 $onempty
@@ -10,15 +10,19 @@ $offsymxref
 $offuellist
 $offuelxref
 
-Option limrow=0, limcol=0, solprint=off, sysout=off;
-
+Option limrow = 0,
+       limcol = 0,
+       solprint = off,
+       sysout = off
+;
 
 ********************************************************************************
-** READING INPUT DATA
+*** READING INPUT DATA                                                         *
 ********************************************************************************
 
 ** We assume that the total injections/extractions from ES are accepted by DEPO
 ** In the general case, DEPO would provide a slightly different schedule or not
+
 $include C:\BPA_project\Test_connect_DA_new_ok\input_data.gms
 
 Table p_ext2(d,t)
@@ -28,7 +32,7 @@ $offdelim
 ;
 
 ********************************************************************************
-** DECLARATION OF FREE VARIABLES, POSITIVE VARIABLES, BINARY VARIABLES
+*** DECLARATION OF FREE VARIABLES, POSITIVE VARIABLES, BINARY VARIABLES        *
 ********************************************************************************
 
 
@@ -83,6 +87,10 @@ equations
          voltage_angles_max(t,s)                 maximum voltage phase angle limits
 
 ;
+
+** We duplicate the set t, which is going to be needed in the minimum up and
+** down time constraints
+
 alias (t,tt);
 
 ********************************************************************************
@@ -95,7 +103,7 @@ cost..
          + sum((t,r), slack_solar(r,t)) * VoRS
          + sum((t,w), slack_wind(w,t)) * VoRS
          + sum((f,t),slack_fixed(f,t))*10000000
-*         + sum((s,t),slack(s,t))*100000000
+*        + sum((s,t),slack(s,t))*100000000
          + sum((l,t),slack_flow(l,t))*100000000
 ;
 

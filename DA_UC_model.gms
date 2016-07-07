@@ -1,5 +1,5 @@
 ********************************************************************************
-** FIRST STAGE OF THE CONGESTION RELIEF PROBLEM. DAY-AHEAD SCHEDULE
+*** FIRST STAGE OF THE CONGESTION RELIEF PROBLEM. DAY-AHEAD SCHEDULE           *
 ********************************************************************************
 
 $onempty
@@ -10,68 +10,71 @@ $offsymxref
 $offuellist
 $offuelxref
 
-Option limrow=0, limcol=0, solprint=off, sysout=off;
+option limrow = 0,
+       limcol = 0,
+       solprint = off,
+       sysout = off
+;
 
 ********************************************************************************
-** READING INPUT DATA
+*** READING INPUT DATA                                                         *
 ********************************************************************************
 
 $include C:\BPA_project\Test_connect_DA_new_ok\input_data.gms
 
 ********************************************************************************
-** DECLARATION OF FREE VARIABLES, POSITIVE VARIABLES, BINARY VARIABLES
+*** DECLARATION OF FREE VARIABLES, POSITIVE VARIABLES, BINARY VARIABLES        *
 ********************************************************************************
 
 variables
-         obj                     objective function of the unit commitment
-         pf(t,l)                 power flow
-         theta(t,s)              voltage angles
-         g(t,i)                  power output of generators
+        obj                      objective function of the unit commitment
+        pf(t, l)                 power flow
+        theta(t, s)              voltage angles
+        g(t, i)                  power output of generators
 ;
 
 
 positive variables
-         g_lin(t,i,b)            generator block outputs
-         slack_solar(r,t)        solar spillage
-         slack_wind(w,t)         wind spillage
-         slack_fixed(f,t)        fixed spillage
-         slack_flow(l,t)         Relaxations for the transmission capacity constraints
-         slack(s,t)              Relaxation of the power balance equation just in case the problem is infeasible
+        g_lin(t, i, b)           generator block outputs
+        slack_solar(r, t)        solar spillage
+        slack_wind(w, t)         wind spillage
+        slack_fixed(f, t)        fixed spillage
+        slack_flow(l, t)         Relaxations for the transmission capacity constraints
+        slack(s, t)              Relaxation of the power balance equation just in case the problem is infeasible
 ;
 
 
 binary variables
-         v(t,i)                  commitment variable
-         y(t,i)                  start up variable
-         z(t,i)                  shut down variable
+         v(t, i)                 commitment variable
+         y(t, i)                 start up variable
+         z(t, i)                 shut down variable
 ;
 
 
 equations
-         cost                                    objective function
-         bin_set1(t,i)                           binary logic constraint 1
-         bin_set10(t,i)                          binary logic constraint 1_2
-         bin_set2(t,i)                           binary logic constraint 2
-         min_updown_1(t,i)                       Initial statuses
-         min_updown_2(t,i)                       minimum up time constraint
-         min_updown_3(t,i)                       minimum down time constraint
-         slack_wind_constr(t,w)                  maximum wind spillage constraint
-         slack_solar_constr(t,r)                 maximum solar spillage constraint
-         slack_fixed_constr(t,f)                 maximum fixed "spillage" constraint
-         gen_sum(t,i)                            summation over all blocks
-         gen_min(t,i)                            minimum power output of generators
-         block_output(t,i,b)                     maximum power output of each block
-         ramp_limit_min(t,i)                     ramp down constraint
-         ramp_limit_max(t,i)                     ramp up constraint
-         ramp_limit_min_1(i)                     ramp down constraint t=1
-         ramp_limit_max_1(i)                     ramp up constraint t=1
-         line_flow(t,l)                          power flow
-*         line_capacity_min(t,l)                  maximum power flow limits
-*         line_capacity_max(t,l)                  minimum power flow limits
-         power_balance(t,s)                      power balance equation
-         voltage_angles_min(t,s)                 minimum voltage phase angle limits
-         voltage_angles_max(t,s)                 maximum voltage phase angle limits
-
+         cost                            objective function
+         bin_set1(t, i)                  binary logic constraint 1
+         bin_set10(t, i)                 binary logic constraint 1_2
+         bin_set2(t, i)                  binary logic constraint 2
+         min_updown_1(t, i)              Initial statuses
+         min_updown_2(t, i)              minimum up time constraint
+         min_updown_3(t, i)              minimum down time constraint
+         slack_wind_constr(t, w)         maximum wind spillage constraint
+         slack_solar_constr(t, r)        maximum solar spillage constraint
+         slack_fixed_constr(t, f)        maximum fixed "spillage" constraint
+         gen_sum(t, i)                   summation over all blocks
+         gen_min(t, i)                   minimum power output of generators
+         block_output(t, i, b)           maximum power output of each block
+         ramp_limit_min(t, i)            ramp down constraint
+         ramp_limit_max(t, i)            ramp up constraint
+         ramp_limit_min_1(i)             ramp down constraint t=1
+         ramp_limit_max_1(i)             ramp up constraint t=1
+         line_flow(t, l)                 power flow
+*        line_capacity_min(t, l)         maximum power flow limits
+*        line_capacity_max(t, l)         minimum power flow limits
+         power_balance(t, s)             power balance equation
+         voltage_angles_min(t, s)        minimum voltage phase angle limits
+         voltage_angles_max(t, s)        maximum voltage phase angle limits
 ;
 
 ** We duplicate the set t, which is going to be needed in the minimum up and

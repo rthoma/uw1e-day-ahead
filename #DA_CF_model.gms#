@@ -244,19 +244,36 @@ ramp_limit_max_1(i)..
 ** Nodal power balance equations including the power output of conventional thermal units
 ** fixed generation, solar generation, wind generation, in and out flows, and the nodal demand
 ** Now we also incorporate the injections from the ES devices
-power_balance(t,s)..
-         sum(i$(gen_map(i)=ord(s)),gbis(t,i)+deltag_plus(t,i)-deltag_minus(t,i))
-        + sum(f$(fix_map(f)=ord(s)), fix_deterministic(f,t)-slack_fixed_bis(f,t)-slack_fixed_plus(t,f)+slack_fixed_minus(t,f)) +
-         sum(r$(sol_map(r)=ord(s)), sol_deterministic(t,r)-slack_solar_bis(r,t)-slack_solar_plus(t,r)+slack_solar_minus(t,r)) +
-         sum(w$(win_map(w)=ord(s)), wind_deterministic(t,w)-slack_wind_bis(w,t)-slack_wind_plus(t,w)+slack_wind_minus(t,w) )
-         -sum(l$(line_map(l,'from') = ord(s)),pf(t,l)) +
-         sum(l$(line_map(l,'to') = ord(s)),pf(t,l))
-         =e= demand(s,t)+sum(d$(storage_map(d) eq ord(s)),ch_total(t,d)-dis_total(t,d) )
+
+power_balance(t, s)$(t_ha(t))..
+    demand(s, t) + sum(d$(storage_map(d) eq ord(s)), ch_total(t, d) - dis_total(t, d)) =e=
+          sum(i$(gen_map(i) = ord(s)),
+                 gbis(t, i)
+               + deltag_plus(t, i)
+               - deltag_minus(t, i))
+        + sum(f$(fix_map(f) = ord(s)),
+                 fix_deterministic(f, t)
+               - slack_fixed_bis(f, t)
+               - slack_fixed_plus(t, f)
+               + slack_fixed_minus(t,f))
+        + sum(r$(sol_map(r) = ord(s)),
+                 sol_deterministic(t, r)
+               - slack_solar_bis(r, t)
+               - slack_solar_plus(t, r)
+               + slack_solar_minus(t, r))
+        + sum(w$(win_map(w) = ord(s)),
+                 wind_deterministic(t, w)
+               - slack_wind_bis(w, t)
+               - slack_wind_plus(t, w)
+               + slack_wind_minus(t, w))
+        - sum(l$(line_map(l, 'from') = ord(s)), pf(t, l))
+        + sum(l$(line_map(l, 'to') = ord(s)), pf(t, l))
 ;
 
 ** Definition of the power flow of each line in terms of the voltage phase angles
-line_flow(t,l)..
-         pf(t,l) =e= admittance(l)*(sum(s$(line_map(l,'from')= ord(s)),theta(t,s))-sum(s$(line_map(l,'to')= ord(s)),theta(t,s)));
+line_flow(t, l)..
+        pf(t, l) =e= admittance(l)*(sum(s$(line_map(l, 'from') = ord(s)), theta(t, s))
+                                  - sum(s$(line_map(l, 'to') = ord(s)), theta(t, s)));
 
 ** Transmission capacity constraints
 line_capacity_min(t,l)..

@@ -13,12 +13,12 @@ set f            index of fixed generators /f1*f440/;
 set day          day counter /day1*day5/;
 
 *set j start up cost intervals /j1*j8/;
-set from_to      lines from and to /from,to/;
+set from_to      lines from and to /from, to/;
 set column       generator connected to bus /col/;
 set wcolumn      wind connected to bus /wcol/;
 set rcolumn      solar connected to bus /rcol/;
 set fcolumn      fixed connected to bus /fcol/;
-set iter         number of iterations /iter1*iter40/
+set iter         number of iterations /iter1*iter40/;
 set d            set of storage units /d1/;
 set snopud(s)    set of buses that belong to snopud area /s1831*s1958/;
 
@@ -144,7 +144,6 @@ table g_0_day(day,i) generator generation at t=0
 $include C:\BPA_project\Test_connect_DA_new_ok\Data\aux10.inc
 ;
 
-** Transformation of the previous matrix into a vector
 parameter onoff_t0_day(day,i) on-off status at t=0;
 onoff_t0_day(day,i)$(count_on_init_day(day,i) gt 0) = 1;
 
