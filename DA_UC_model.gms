@@ -10,10 +10,11 @@ $offsymxref
 $offuellist
 $offuelxref
 
-option limrow = 0,
-       limcol = 0,
-       solprint = off,
-       sysout = off
+option
+        limrow = 0,
+        limcol = 0,
+        solprint = off,
+        sysout = off
 ;
 
 ********************************************************************************

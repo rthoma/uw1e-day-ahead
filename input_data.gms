@@ -284,10 +284,11 @@ scalar penalty_pf /2000/;
 
 
 scalars
-         VoRS            value of wind spillage /20/
-         s_base          base power /100/
-         counter         counter /2/
-         N_iter          number of iterations /2/
+        VoRS                       value of wind spillage /20/
+        s_base                     base power /100/
+        counter                    counter /2/
+        N_iter                     number of iterations /2/
+        FEASIBILITY_PENALTY        feasibility penalty /100000000/
 ;
 
 ** Day number from 0 to N
@@ -397,6 +398,3 @@ E_final(d)=E_final(d)/s_base;
 
 ** Definition of auxiliary parameters used to output some results
 Parameter  action_aux(t,s),action(t,d),minimum_load_aux(t,s), maximum_load_aux(t,s) , minimum_load(t,d), maximum_load(t,d);
-
-
-
